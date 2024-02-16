@@ -36,7 +36,14 @@ loop do
 			finished = false
 		end
 	end
-	break if finished
+	if finished
+		p returns.sum
+		puts
+		break
+	end
 end
 
 p contributions
+puts 
+
+p (0..years).map { |i| ((contributions[i].to_f / salaries[i]) * 1000).to_i }
