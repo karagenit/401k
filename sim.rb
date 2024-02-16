@@ -2,7 +2,7 @@
 
 years = 65 - 23 # retirement age - current age (including 0 as first year!)
 start_salary = 125000
-end_salary = 200000
+end_salary = 500000
 salaries = (0..years).map { |i| (start_salary + (end_salary - start_salary) * (i.to_f / years)).to_i }
 
 def tax_bracket(income) # 2024 single filer tax brackets
@@ -17,6 +17,7 @@ end
 
 # start at 6% to get the employer match, then increment when advantageous
 contributions = salaries.map { |sal| (sal * 0.06).to_i }
+contributions.map! { |con| con > 22000 ? 22000 : con }
 # TODO add employer match to contributions too
 
 p contributions
