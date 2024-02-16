@@ -25,7 +25,8 @@ puts
 roi = 1.07 # post-inflation average stock market return
 
 loop do
-	returns = contributions.each_with_index.map { |cont,i| (cont * (roi ** (years - i))).to_i }
+	# add the salaries * 6% to include the employer match
+	returns = contributions.each_with_index.map { |cont,i| ((cont + (salaries[i] * 0.06)) * (roi ** (years - i))).to_i }
 	finished = true #should we exit the loop
 	min_distributions = (returns.sum / 30.0).to_i # Required Min. Distributions from 401k after retirement
 	rmd_tax = tax_bracket(min_distributions)
