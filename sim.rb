@@ -4,6 +4,7 @@ years = 65 - 23 # retirement age - current age (including 0 as first year!)
 start_salary = 125000
 end_salary = 500000
 salaries = (0..years).map { |i| (start_salary + (end_salary - start_salary) * (i.to_f / years)).to_i }
+k401_limit = 23000
 
 def tax_bracket(income) # 2024 single filer tax brackets
 	return 0.10 if income <  11600
@@ -17,7 +18,7 @@ end
 
 # start at 6% to get the employer match, then increment when advantageous
 contributions = salaries.map { |sal| (sal * 0.06).to_i }
-contributions.map! { |con| con > 22000 ? 22000 : con }
+contributions.map! { |con| con > k401_limit ? k401_limit : con }
 # TODO add employer match to contributions too
 
 p contributions
@@ -32,7 +33,7 @@ loop do
 	min_distributions = (returns.sum / 30.0).to_i # Required Min. Distributions from 401k after retirement
 	rmd_tax = tax_bracket(min_distributions)
 	(0..years).each do |year|
-		if (tax_bracket(salaries[year] - contributions[year]) > rmd_tax and contributions[year] < 22000)
+		if (tax_bracket(salaries[year] - contributions[year]) > rmd_tax and contributions[year] < k401_limit)
 			contributions[year] += 1
 			finished = false
 		end
