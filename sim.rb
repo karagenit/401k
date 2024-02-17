@@ -6,6 +6,8 @@ years = retirement_age - start_age # retirement age - current age (including 0 a
 start_salary = 125000
 end_salary = 300000
 salaries = (0..years).map { |i| (start_salary + (end_salary - start_salary) * (i.to_f / years)).to_i }
+roi = 1.07 # post-inflation average stock market return
+rmd_pct = 0.04
 
 def tax_bracket(income) # 2024 single filer tax brackets
 	return 0.10 if income <  11600
@@ -25,13 +27,11 @@ end
 contributions = salaries.map { |sal| (sal * 0.06).to_i }
 contributions = contributions.each_with_index.map { |con, year| con > k401_limit(year+23) ? k401_limit(year+23) : con }
 
-roi = 1.07 # post-inflation average stock market return
-
 loop do
 	# add the salaries * 6% to include the employer match
 	returns = contributions.each_with_index.map { |cont,i| ((cont + (salaries[i] * 0.06)) * (roi ** (years - i))).to_i }
 	finished = true #should we exit the loop
-	min_distributions = (returns.sum / 30.0).to_i # Required Min. Distributions from 401k after retirement
+	min_distributions = (returns.sum * rmd_pct).to_i # Required Min. Distributions from 401k after retirement
 	rmd_tax = tax_bracket(min_distributions)
 	(0..years).each do |year|
 		if (tax_bracket(salaries[year] - contributions[year]) > rmd_tax and contributions[year] < k401_limit(year+23))
