@@ -34,7 +34,7 @@ loop do
 	min_distributions = (returns.sum * rmd_pct).to_i # Required Min. Distributions from 401k after retirement
 	rmd_tax = tax_bracket(min_distributions)
 	(0..years).each do |year|
-		if (tax_bracket(salaries[year] - contributions[year]) > rmd_tax and contributions[year] < k401_limit(year+23))
+		if (tax_bracket(salaries[year] - contributions[year]) > rmd_tax and contributions[year] < k401_limit(year+start_age))
 			contributions[year] += 1
 			finished = false
 		end
