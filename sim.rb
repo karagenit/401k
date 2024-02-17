@@ -1,6 +1,8 @@
 # calculate how much I should contribute to my 401k each year
 
-years = 60 - 23 # retirement age - current age (including 0 as first year!)
+start_age = 23
+retirement_age = 60
+years = retirement_age - start_age # retirement age - current age (including 0 as first year!)
 start_salary = 125000
 end_salary = 300000
 salaries = (0..years).map { |i| (start_salary + (end_salary - start_salary) * (i.to_f / years)).to_i }
