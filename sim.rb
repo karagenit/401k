@@ -2,7 +2,7 @@
 
 years = 65 - 23 # retirement age - current age (including 0 as first year!)
 start_salary = 125000
-end_salary = 500000
+end_salary = 300000
 salaries = (0..years).map { |i| (start_salary + (end_salary - start_salary) * (i.to_f / years)).to_i }
 k401_limit = 23000
 
@@ -19,10 +19,6 @@ end
 # start at 6% to get the employer match, then increment when advantageous
 contributions = salaries.map { |sal| (sal * 0.06).to_i }
 contributions.map! { |con| con > k401_limit ? k401_limit : con }
-# TODO add employer match to contributions too
-
-p contributions
-puts
 
 roi = 1.07 # post-inflation average stock market return
 
@@ -39,13 +35,16 @@ loop do
 		end
 	end
 	if finished
-		p returns.sum
-		puts
+		puts "Total 401(k) Value at Retirement: $#{returns.sum}"
+		puts "Estimated Yearly RMDs: $#{min_distributions}"
 		break
 	end
 end
 
-p contributions
-puts 
-
-p (0..years).map { |i| ((contributions[i].to_f / salaries[i]) * 1000).to_i }
+(0..years).each do |i|
+	print "Year #{i} "
+	print "Salary $#{salaries[i]} "
+	print "Contribution $#{contributions[i]} "
+	pct = 100.0 * contributions[i] / salaries[i]
+	print "(#{pct.round(2)}%)\n"
+end
