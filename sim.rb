@@ -24,8 +24,8 @@ def k401_limit(age)
 end
 
 # start at 6% to get the employer match, then increment when advantageous
-contributions = salaries.map { |sal| (sal * 0.06).to_i }
-contributions = contributions.each_with_index.map { |con, year| con > k401_limit(year+23) ? k401_limit(year+23) : con }
+contributions = salaries.map { |sal| (sal * 0.06).to_i } # TODO move 0.06 to constant
+contributions = contributions.each_with_index.map { |con, year| con > k401_limit(year+start_age) ? k401_limit(year+start_age) : con }
 
 loop do
 	# add the salaries * 6% to include the employer match
